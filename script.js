@@ -6,6 +6,9 @@ for (let i = 0; i < productNumber; i++) {
   document
     .getElementsByClassName("fa-minus")
     [i].parentElement.addEventListener("click", decrease);
+  document
+    .getElementsByClassName("remove-item")
+    [i].addEventListener("click", removeItem);
 }
 var unitPrice;
 function increase() {
@@ -41,4 +44,8 @@ function decrease() {
     itemPrice = unitPrice * unitQuantity;
     itemPriceContainer.innerText = itemPrice;
   }
+}
+var a;
+function removeItem() {
+  this.parentElement.parentElement.parentElement.remove();
 }
