@@ -27,6 +27,9 @@ function increase() {
   unitQuantityContainer.value = unitQuantity;
   itemPrice = unitQuantity * unitPrice;
   itemPriceContainer.innerText = itemPrice;
+  subtotal();
+  tax();
+  total();
 }
 function decrease() {
   let unitQuantityContainer = this.nextElementSibling;
@@ -44,8 +47,37 @@ function decrease() {
     itemPrice = unitPrice * unitQuantity;
     itemPriceContainer.innerText = itemPrice;
   }
+  subtotal();
+  tax();
+  total();
 }
-var a;
+
 function removeItem() {
   this.parentElement.parentElement.parentElement.remove();
+  subtotal();
+  tax();
+  total();
+}
+function subtotal() {
+  let productPriceList = document.querySelectorAll(".number-spinner+h5");
+  let subtotalContainer = document.querySelectorAll(".status>h5")[0];
+  subtotalContainer.innerText = "";
+  let subtotal = 0;
+  for (let i = 0; i < productPriceList.length; i++) {
+    let price = parseInt(productPriceList[i].innerText.replace("$", ""));
+    subtotal += price;
+  }
+  subtotalContainer.innerText = "$" + subtotal;
+  return subtotal;
+}
+function tax() {
+  let taxContainer = document.querySelectorAll(".status>h5")[1];
+  let tax = parseInt(taxContainer.innerText.replace("$", ""));
+  return tax;
+}
+function total() {
+  let totalContainer = document.querySelectorAll(".status>h5")[2];
+  let total = subtotal() - tax();
+  totalContainer.innerText = "";
+  totalContainer.innerText = "$" + total;
 }
