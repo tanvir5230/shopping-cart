@@ -1,15 +1,3 @@
-let itemPriceContainer = document.getElementsByTagName("h5")[1];
-let itemPrice = parseInt(itemPriceContainer.innerText.replace("$", ""));
-let unitPrice = itemPrice;
-let plusSign = document.getElementsByClassName("fa-plus")[0].parentElement;
-let minusSign = document.getElementsByClassName("fa-minus")[0].parentElement;
-let unitValue;
-let unitValueContainer;
-function itemPriceIncrease() {
-  itemPrice = unitValue * unitPrice;
-  itemPriceContainer.innerText = "$" + itemPrice;
-}
-
 let productNumber = document.getElementsByClassName("product").length;
 for (let i = 0; i < productNumber; i++) {
   document
@@ -19,28 +7,38 @@ for (let i = 0; i < productNumber; i++) {
     .getElementsByClassName("fa-minus")
     [i].parentElement.addEventListener("click", decrease);
 }
-
+var unitPrice;
 function increase() {
-  unitValueContainer = this.previousElementSibling;
-  unitValue = parseInt(unitValueContainer.value);
-  unitValue += 1;
-  unitValueContainer.value = unitValue;
-  event.stopPropagation();
+  let unitQuantityContainer = this.previousElementSibling;
+  let unitQuantity = parseInt(unitQuantityContainer.value);
+  let itemPriceContainer = this.parentElement.nextElementSibling;
+  let itemPrice = parseInt(itemPriceContainer.innerText.replace("$", ""));
+  if (unitQuantity == 0) {
+    unitPrice = unitPrice;
+  } else if (unitQuantity == 1) {
+    unitPrice = itemPrice;
+  } else {
+    unitPrice = itemPrice / unitQuantity;
+  }
+  unitQuantity += 1;
+  unitQuantityContainer.value = unitQuantity;
+  itemPrice = unitQuantity * unitPrice;
+  itemPriceContainer.innerText = itemPrice;
 }
 function decrease() {
-  unitValueContainer = this.nextElementSibling;
-  unitValue = parseInt(unitValueContainer.value);
-  if (unitValue > 0) {
-    unitValue -= 1;
-    unitValueContainer.value = unitValue;
+  let unitQuantityContainer = this.nextElementSibling;
+  let unitQuantity = parseInt(unitQuantityContainer.value);
+  let itemPriceContainer = this.parentElement.nextElementSibling;
+  let itemPrice = parseInt(itemPriceContainer.innerText.replace("$", ""));
+  if (unitQuantity > 0) {
+    if (unitQuantity == 1) {
+      unitPrice = itemPrice;
+    } else if (unitQuantity > 1) {
+      unitPrice = itemPrice / unitQuantity;
+    }
+    unitQuantity -= 1;
+    unitQuantityContainer.value = unitQuantity;
+    itemPrice = unitPrice * unitQuantity;
+    itemPriceContainer.innerText = itemPrice;
   }
-  event.stopPropagation();
 }
-function removeItem() {
-  this.parentElement.parentElement.parentElement.remove();
-}
-plusSign.addEventListener("click", increase);
-minusSign.addEventListener("click", decrease);
-
-let crossBtn = document.getElementsByClassName("remove-item")[0];
-crossBtn.addEventListener("click", removeItem);
